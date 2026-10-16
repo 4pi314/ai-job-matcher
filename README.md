@@ -1,4 +1,5 @@
 # AI Job Matcher
+![Automated Tests](https://github.com/4pi314/ai-job-matcher/actions/workflows/tests.yml/badge.svg)
 
 A Python and Streamlit web application that compares a résumé with a job description, calculates a similarity score, and identifies matched and missing technical skills.
 
@@ -25,6 +26,7 @@ A Python and Streamlit web application that compares a résumé with a job descr
 - Ubuntu through WSL 2
 - pypdf
 - python-docx
+- GitHub Actions
 
 ## How It Works
 
@@ -120,7 +122,7 @@ Python SQL Docker Git
 - Résumé improvement recommendations
 - Docker support
 - Public cloud deployment
-- Continuous integration with GitHub Actions
+
 
 
 ## Author
