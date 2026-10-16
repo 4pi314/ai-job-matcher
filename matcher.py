@@ -1,5 +1,49 @@
+import re
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+
+
+SKILLS = {
+    "python",
+    "java",
+    "javascript",
+    "typescript",
+    "c++",
+    "c#",
+    "sql",
+    "html",
+    "css",
+    "react",
+    "node.js",
+    "django",
+    "flask",
+    "fastapi",
+    "git",
+    "github",
+    "docker",
+    "kubernetes",
+    "linux",
+    "aws",
+    "azure",
+    "gcp",
+    "google cloud",
+    "machine learning",
+    "deep learning",
+    "tensorflow",
+    "pytorch",
+    "scikit-learn",
+    "pandas",
+    "numpy",
+    "nlp",
+    "natural language processing",
+    "computer vision",
+    "rest api",
+    "rest apis",
+    "mongodb",
+    "mysql",
+    "postgresql",
+}
 
 
 def calculate_match(resume_text: str, job_description: str) -> float:
@@ -15,7 +59,38 @@ def calculate_match(resume_text: str, job_description: str) -> float:
         vectors = vectorizer.fit_transform(
             [resume_text, job_description]
         ).toarray()  # type: ignore
+
         score = cosine_similarity(vectors[0:1], vectors[1:2])[0][0]
         return round(float(score) * 100, 1)
     except ValueError:
         return 0.0
+
+
+def extract_skills(text: str) -> set[str]:
+    """Extract recognized technical skills from text."""
+    normalized_text = text.lower()
+
+    found_skills = {
+        skill
+        for skill in SKILLS
+        if re.search(
+            rf"(?<![\w+#.]){re.escape(skill)}(?![\w+#.])",
+            normalized_text,
+        )
+    }
+
+    return found_skills
+
+
+def compare_skills(
+    resume_text: str,
+    job_description: str,
+) -> tuple[list[str], list[str]]:
+    """Return matched skills and skills missing from the résumé."""
+    resume_skills = extract_skills(resume_text)
+    job_skills = extract_skills(job_description)
+
+    matched_skills = sorted(resume_skills & job_skills)
+    missing_skills = sorted(job_skills - resume_skills)
+
+    return matched_skills, missing_skills
