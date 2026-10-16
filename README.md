@@ -15,6 +15,7 @@ A Python and Streamlit web application that compares a résumé with a job descr
 - Supports PDF, DOCX, and TXT résumé uploads
 - Calculates separate text-similarity and skill-coverage scores
 - Combines both measurements into a transparent overall score
+- Supports containerized deployment with Docker
 
 ## Technologies
 
@@ -27,6 +28,7 @@ A Python and Streamlit web application that compares a résumé with a job descr
 - pypdf
 - python-docx
 - GitHub Actions
+- Docker
 
 ## How It Works
 
@@ -50,7 +52,10 @@ ai-job-matcher/
 ├── requirements.txt
 ├── tests/
 │   └── test_matcher.py
+├── Dockerfile
+├── .dockerignore
 └── README.md
+
 ```
 
 ## Installation
@@ -82,6 +87,31 @@ streamlit run app.py
 ```
 
 Open `http://localhost:8501` in your browser if it does not open automatically.
+
+## Run with Docker
+
+Build the Docker image:
+
+```bash
+docker build -t ai-job-matcher:latest .
+```
+
+Run the container:
+
+```bash
+docker run --rm -d \
+  --name ai-job-matcher \
+  -p 8501:8501 \
+  ai-job-matcher:latest
+```
+
+Open `http://localhost:8501` in your browser.
+
+Stop the container:
+
+```bash
+docker stop ai-job-matcher
+```
 
 ## Run the Tests
 
@@ -120,7 +150,6 @@ Python SQL Docker Git
 
 - Expanded skill recognition
 - Résumé improvement recommendations
-- Docker support
 - Public cloud deployment
 
 
