@@ -1,4 +1,10 @@
-from matcher import calculate_match, compare_skills, extract_skills
+from matcher import (
+    calculate_match,
+    calculate_overall_match,
+    calculate_skill_coverage,
+    compare_skills,
+    extract_skills,
+)
 
 
 def test_identical_text_returns_full_match():
@@ -49,3 +55,38 @@ def test_compare_skills_with_empty_resume():
 
     assert matched == []
     assert missing == ["docker", "python"]
+
+def test_full_skill_coverage():
+    score = calculate_skill_coverage(
+        "Python SQL Docker Git",
+        "Python SQL Docker Git",
+    )
+
+    assert score == 100.0
+
+
+def test_partial_skill_coverage():
+    score = calculate_skill_coverage(
+        "Python SQL Git",
+        "Python SQL Docker Git",
+    )
+
+    assert score == 75.0
+
+
+def test_skill_coverage_without_recognized_job_skills():
+    score = calculate_skill_coverage(
+        "Python developer",
+        "Excellent communication and teamwork",
+    )
+
+    assert score == 0.0
+
+
+def test_overall_match_combines_both_scores():
+    score = calculate_overall_match(
+        "Python SQL Git",
+        "Python SQL Docker Git",
+    )
+
+    assert score == 76.1

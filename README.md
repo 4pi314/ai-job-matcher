@@ -11,6 +11,9 @@ A Python and Streamlit web application that compares a résumé with a job descr
 - Handles empty or invalid input
 - Includes automated tests with pytest
 - Provides an interactive Streamlit interface
+- Supports PDF, DOCX, and TXT résumé uploads
+- Calculates separate text-similarity and skill-coverage scores
+- Combines both measurements into a transparent overall score
 
 ## Technologies
 
@@ -20,6 +23,8 @@ A Python and Streamlit web application that compares a résumé with a job descr
 - pytest
 - Git and GitHub
 - Ubuntu through WSL 2
+- pypdf
+- python-docx
 
 ## How It Works
 
@@ -37,6 +42,7 @@ A Python and Streamlit web application that compares a résumé with a job descr
 ```text
 ai-job-matcher/
 ├── app.py
+├── document_parser.py
 ├── matcher.py
 ├── pyproject.toml
 ├── requirements.txt
@@ -109,13 +115,13 @@ Python SQL Docker Git
 
 ## Planned Improvements
 
-- PDF and DOCX résumé uploads
+
 - Expanded skill recognition
-- Skill-based scoring alongside text similarity
 - Résumé improvement recommendations
 - Docker support
 - Public cloud deployment
 - Continuous integration with GitHub Actions
+
 
 ## Author
 

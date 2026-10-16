@@ -1,7 +1,12 @@
 import streamlit as st
 
 from document_parser import extract_text_from_file
-from matcher import calculate_match, compare_skills
+from matcher import (
+    calculate_match,
+    calculate_overall_match,
+    calculate_skill_coverage,
+    compare_skills,
+)
 
 
 st.set_page_config(
@@ -79,21 +84,46 @@ if st.button("Calculate Match", type="primary"):
             "Please provide both a résumé and a job description."
         )
     else:
-        score = calculate_match(resume_text, job_description)
+        text_score = calculate_match(
+                    resume_text,
+                    job_description,
+        )
+        skill_score = calculate_skill_coverage(
+                    resume_text,
+                    job_description,
+        )
+        overall_score = calculate_overall_match(
+                    resume_text,
+                    job_description,
+        )
         matched_skills, missing_skills = compare_skills(
-            resume_text,
-            job_description,
+                    resume_text,
+                    job_description,
         )
 
         st.subheader("Match Result")
-        st.metric("Overall Match Score", f"{score}%")
-        st.progress(score / 100)
 
-        if score >= 70:
+        overall_column, text_column, skill_column = st.columns(3)
+
+        with overall_column:
+            st.metric("Overall Match", f"{overall_score}%")
+
+        with text_column:
+            st.metric("Text Similarity", f"{text_score}%")
+
+        with skill_column:
+            st.metric("Skill Coverage", f"{skill_score}%")
+
+        st.caption(
+            "Overall score = 40% text similarity + 60% skill coverage."
+        )
+        st.progress(overall_score / 100)
+
+        if overall_score >= 70:
             st.success(
                 "Strong match! Your résumé aligns well with this job."
             )
-        elif score >= 40:
+        elif overall_score >= 40:
             st.warning(
                 "Moderate match. Your résumé may need some improvements."
             )
@@ -101,6 +131,8 @@ if st.button("Calculate Match", type="primary"):
             st.error(
                 "Low match. Consider tailoring your résumé to this role."
             )
+
+        
 
         st.subheader("Skill Analysis")
 

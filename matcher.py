@@ -94,3 +94,39 @@ def compare_skills(
     missing_skills = sorted(job_skills - resume_skills)
 
     return matched_skills, missing_skills
+
+def calculate_skill_coverage(
+    resume_text: str,
+    job_description: str,
+) -> float:
+    """Return the percentage of job skills found in the résumé."""
+    job_skills = extract_skills(job_description)
+
+    if not job_skills:
+        return 0.0
+
+    resume_skills = extract_skills(resume_text)
+    matched_skills = resume_skills & job_skills
+
+    coverage = len(matched_skills) / len(job_skills)
+    return round(coverage * 100, 1)
+
+
+def calculate_overall_match(
+    resume_text: str,
+    job_description: str,
+) -> float:
+    """Combine text similarity and skill coverage into one score."""
+    text_score = calculate_match(resume_text, job_description)
+    job_skills = extract_skills(job_description)
+
+    if not job_skills:
+        return text_score
+
+    skill_score = calculate_skill_coverage(
+        resume_text,
+        job_description,
+    )
+
+    overall_score = (text_score * 0.4) + (skill_score * 0.6)
+    return round(overall_score, 1)
