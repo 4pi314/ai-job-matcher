@@ -7,6 +7,16 @@ A Python and Streamlit web application that compares a résumé with a job descr
 
 [Try the AI Job Matcher](https://alaa-ai-job-matcher.streamlit.app)
 
+
+## Application Preview
+
+### Résumé and Job Description
+
+![Résumé and job description inputs](docs/app-input.png)
+
+### Match Analysis Results
+
+![AI Job Matcher results](docs/app-results.png)
 ## Features
 
 - Calculates résumé-to-job similarity using TF-IDF
