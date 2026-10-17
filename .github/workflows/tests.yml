@@ -29,3 +29,26 @@ jobs:
 
       - name: Run automated tests
         run: pytest -v
+
+      - name: Build Docker image
+        run: docker build -t ai-job-matcher:test .
+
+      - name: Test Docker container
+        run: |
+          docker run -d \
+            --name ai-job-matcher-test \
+            -p 8501:8501 \
+            ai-job-matcher:test
+
+          for attempt in {1..30}; do
+            if curl --fail http://localhost:8501/_stcore/health; then
+              docker stop ai-job-matcher-test
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          docker logs ai-job-matcher-test
+          docker stop ai-job-matcher-test
+          exit 1
